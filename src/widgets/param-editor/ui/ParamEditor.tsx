@@ -1,7 +1,20 @@
-import type { Model, ParamValue } from '@/entities/models/Model';
-import { FeatureEditParam } from '@/features/edit-param';
-import type { Param } from '@/shared/lib/utility-types/params';
-import React from 'react';
+import React, { type ChangeEvent } from 'react';
+
+type Color = 'red' | 'blue' | 'green';
+
+interface Model {
+  paramValues: ParamValue[];
+  colors: Color[];
+}
+interface ParamValue {
+  paramId: number;
+  value: string;
+}
+interface Param {
+  id: number;
+  name: string;
+  type: 'string';
+}
 
 interface Props {
   params: Param[];
@@ -31,14 +44,31 @@ class ParamEditor extends React.Component<Props, State> {
     };
   }
 
-  private onParamEdit({paramId, value}: ParamValue) {
-    this.setState((prevState) => ({
-      paramValues: prevState.paramValues.map((paramValue) =>
-        paramValue.paramId === paramId
-          ? { ...paramValue, value }
-          : paramValue
-      ),
-    }));
+  private onParamEdit(e: ChangeEvent<HTMLInputElement>, param: Param) {
+    if (param.type !== 'string') {
+      throw new Error('EditParam: paramType not implemented: ' + param.type);
+    }
+
+    this.setState((prevState) => {
+      if (prevState.paramValues.some((paramValue) => paramValue.paramId === param.id)) {
+        return {
+          paramValues: prevState.paramValues.map((paramValue) =>
+            paramValue.paramId === param.id
+             ? {...paramValue, value: e.target.value  }
+              : paramValue
+          ),
+        };
+      }
+      return {
+        paramValues: [
+          ...prevState.paramValues,
+          {
+            paramId: param.id,
+            value: e.target.value,
+          },
+        ]
+      }
+    });
   };
 
   private getParamValue(paramId: number): string {
@@ -55,7 +85,7 @@ class ParamEditor extends React.Component<Props, State> {
         {this.props.params.map((param) => (
           <div key={param.id} className='param-editor-line'>
             <label>{param.name}</label>
-            <FeatureEditParam param={param} value={this.getParamValue(param.id)} onChange={this.onParamEdit} />
+            <input type="text" value={this.getParamValue(param.id)} onChange={(e) => this.onParamEdit(e, param)} />
           </div>
         ))}
       </div>

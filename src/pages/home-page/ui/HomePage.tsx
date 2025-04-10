@@ -4,7 +4,7 @@ import { mockModel, mockParmas } from "../model/mockData";
 
 export const HomePage: FC = () => {
   return <div>
-      <h1>VibeCoder Param Editor</h1>
+      <h1>SelsUp Param Editor</h1>
       <WidgetParamEditor params={mockParmas} model={mockModel} />
   </div>;
 }

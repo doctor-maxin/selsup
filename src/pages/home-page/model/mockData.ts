@@ -30,5 +30,6 @@ export const mockModel: Model = {
             "paramId": 2,
             "value": "макси"
         },
-    ]
+    ],
+    colors: ['red']
 }

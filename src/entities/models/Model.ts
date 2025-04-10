@@ -1,6 +1,8 @@
 export interface Model {
-    paramValues: ParamValue[];
+  colors: Color[];
+  paramValues: ParamValue[];
 }
+type Color = 'red' | 'blue' | 'green';
 
 export interface ParamValue {
     paramId: number;
