@@ -1,0 +1,1 @@
+export {default as WidgetParamEditor} from './ui/ParamEditor'
